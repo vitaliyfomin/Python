@@ -1,3 +1,6 @@
+import os
+from csv import DictReader, DictWriter
+
 def copy_entry(source_file, destination_file):
     try:
         entry_number = int(input("Введите номер строки для копирования: ")) - 1  # Строки начинаются с 1, а индексы с 0
@@ -14,7 +17,7 @@ def copy_entry(source_file, destination_file):
         print("Введите корректный номер строки.")
 
 def main():
-    file_name = 'phone.csv'
+    file_name = 'phone02.csv'
     while True:
         print("Выберите команду:")
         print("1. Вывести данные")
@@ -26,12 +29,12 @@ def main():
         command = input("Введите номер команды: ")
 
         if command == '1':
-            if not exists(file_name):
+            if not os.path.exists(file_name):
                 print("Файл отсутствует. Создайте его")
             else:
                 print(*read_file(file_name))
         elif command == '2':
-            if not exists(file_name):
+            if not os.path.exists(file_name):
                 create_file(file_name)
             write_file(file_name, get_info())
         elif command == '3':
@@ -40,7 +43,7 @@ def main():
             source_file = input("Введите имя файла, из которого нужно скопировать данные: ")
             destination_file = input("Введите имя файла, в который нужно скопировать данные: ")
 
-            if exists(source_file) and exists(destination_file):
+            if os.path.exists(source_file) and os.path.exists(destination_file):
                 copy_entry(source_file, destination_file)
             else:
                 print("Один из файлов не существует. Убедитесь, что оба файла существуют.")
