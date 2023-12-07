@@ -1,9 +1,70 @@
 import os
 from csv import DictReader, DictWriter
 
+class LenNumberError(Exception):
+    def __init__(self, txt):
+        self.txt = txt
+
+class NameError(Exception):
+    def __init__(self, txt):
+        self.txt = txt
+
+def get_info():
+    is_valid_first_name = False
+    while not is_valid_first_name:
+        try:
+            first_name = input("Введите имя: ")
+            if len(first_name) < 2:
+                raise NameError("Не валидное имя")
+            else:
+                is_valid_first_name = True
+        except NameError as err:
+            print(err)
+
+    last_name = "Иванов"
+
+    is_valid_phone = False
+    while not is_valid_phone:
+        try:
+            phone_number = int(input("Введите номер: "))
+            if len(str(phone_number)) != 11:
+                raise LenNumberError("Неверная длина номера")
+            else:
+                is_valid_phone = True
+        except ValueError:
+            print("Не валидный номер!!!")
+        except LenNumberError as err:
+            print(err)
+
+    return [first_name, last_name, phone_number]
+
+def create_file(file_name):
+    with open(file_name, "w", encoding='utf-8') as data:
+        f_writer = DictWriter(data, fieldnames=['Имя', 'Фамилия', 'Телефон'])
+        f_writer.writeheader()
+
+def read_file(file_name):
+    with open(file_name, "r", encoding='utf-8') as data:
+        f_reader = DictReader(data)
+        return list(f_reader)
+
+def write_file(file_name, lst):
+    res = read_file(file_name)
+    for el in res:
+        if el["Телефон"] == str(lst[2]):
+            print("Такой телефон уже есть")
+            return
+
+    obj = {"Имя": lst[0], "Фамилия": lst[1], "Телефон": lst[2]}
+    res.append(obj)
+    with open(file_name, "w", encoding='utf-8', newline='') as data:
+        f_writer = DictWriter(data, fieldnames=['Имя', 'Фамилия', 'Телефон'])
+        f_writer.writeheader()
+        f_writer.writerows(res)
+
 def copy_entry(source_file, destination_file):
     try:
-        entry_number = int(input("Введите номер строки для копирования: ")) - 1  # Строки начинаются с 1, а индексы с 0
+        entry_number = int(input("Введите номер строки для копирования: ")) - 1
         source_data = read_file(source_file)
 
         if 0 <= entry_number < len(source_data):
@@ -38,6 +99,7 @@ def main():
                 create_file(file_name)
             write_file(file_name, get_info())
         elif command == '3':
+            # Добавьте функциональность поиска по характеристике
             pass
         elif command == '4':
             source_file = input("Введите имя файла, из которого нужно скопировать данные: ")
