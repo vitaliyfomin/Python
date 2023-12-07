@@ -83,7 +83,6 @@ def main():
                 create_file(file_name)
             write_file(file_name, get_info())
         elif command == '3':
-            # Добавьте функциональность поиска по характеристике
             pass
         elif command.lower() == 'q':
             break
