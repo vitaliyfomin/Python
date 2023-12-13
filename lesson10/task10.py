@@ -1,5 +1,7 @@
 import pandas as pd
 import random
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 lst = ['robot'] * 10 + ['human'] * 10
 random.shuffle(lst)
@@ -16,3 +18,8 @@ data_one_hot = pd.concat([data, one_hot_encoding], axis=1)
 data_one_hot.drop('whoAmI', axis=1, inplace=True)
 
 print(data_one_hot.head())
+
+plt.figure(figsize=(10, 6))
+sns.heatmap(data_one_hot.transpose(), cmap="YlGnBu", annot=True, fmt="d", cbar=False)
+plt.title('One-Hot Encoding')
+plt.show()
